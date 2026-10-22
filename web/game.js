@@ -194,7 +194,7 @@ function createItem(d, spawn) {
   paintItem(item);
   bindItem(item);
   world.append(node); L.items.push(item); L.remaining.add(item);
-  if (spawn || (!d.inside && d.phase <= L.phase)) { item.revealed = true; if (spawn) popIn(node, item.x, item.y, item.art.w, item.art.h, item.r); }
+  if (spawn || (!d.inside && d.phase <= L.phase)) { item.revealed = true; if (spawn) item.actionTween = popIn(node, item.x, item.y, item.art.w, item.art.h, item.r); }
   else node.classList.add('hidden');
   if (item.revealed && item.phase > L.phase) node.classList.add('wait');
   return item;
@@ -210,7 +210,7 @@ function revealItem(it) {
   if (it.revealed) return;
   it.revealed = true; it.el.classList.remove('hidden');
   if (it.phase > L.phase) it.el.classList.add('wait');
-  popIn(it.el, it.x, it.y, it.art.w, it.art.h, it.r);
+  it.actionTween = popIn(it.el, it.x, it.y, it.art.w, it.art.h, it.r);   // cancellable, so a fast grab or snap is never overwritten by the last pop frame
 }
 const itemActive = (it) => it.revealed && it.phase <= L.phase;
 
@@ -658,6 +658,8 @@ $('#radius').onchange = () => { stage.classList.toggle('show-radius', $('#radius
 window.__tidy = {
   step() { if (!L) return 'none'; if (L.state !== 'Playing' || L.ending) return 'end'; if (help()) return 'did'; return L.busy > 0 || [...L.items].some((i) => i.isDragging || i.actionTween && !i.locked) ? 'wait' : 'stuck'; },
   get state() { return L && { phase: L.phase, max: L.maxPhase, st: L.state, busy: L.busy, left: [...L.remaining].map((i) => i.label || i.group), tasks: [...L.pendingTasks].map((t) => t.verb || t.type), stations: [...L.pendingStations].map((s) => s.id), ending: L.ending, mistakes: L.mistakes }; },
+  get items() { return L && L.items.map((i) => ({ t: i.label || i.group, g: i.group, x: Math.round(i.x), y: Math.round(i.y), locked: i.locked, slot: i.current ? i.current.i : null, phase: i.phase, rem: L.remaining.has(i), hidden: i.el.classList.contains('hidden') })); },
+  get slots() { return L && L.slots.map((s) => ({ i: s.i, g: s.group, x: s.x, y: s.y, snap: s.isSnap, landed: s.landed, can: s.canSnap })); },
   load(i) { room = i; load(); },
 };
 
