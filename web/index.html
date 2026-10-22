@@ -1,91 +1,72 @@
 <meta charset="utf-8">
+<meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Tidy Snap</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Nunito+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Nunito+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
-/* Layout: level picker across the top, a room-sized stage on the left, a "debugger" inspector on the right that narrates the decompiled snap logic live. */
+/* Dark-only site. Layout: top bar, then the play column (goal banner, stage, controls) beside a level list; the snap inspector sits in a collapsible "Under the hood" panel. */
 :root {
-  --bg: #eef1ec; --panel: #ffffff; --ink: #1d2622; --muted: #5d6b64; --line: #d5dcd6;
-  --accent: #2f5bd3; --ok: #2e8b57; --warn: #b9532e;
-  --wall: #dfe7e0; --wall-2: #cfdad2; --wall-kid: #e6e1f2; --floor: #cdbb9f; --wood: #b98a5e; --wood-dk: #8a6240; --metal: #98a3a8; --sky: #cfe6f2;
-  --counter: #d9d4cc; --cab: #a9b8b0; --cabline: #8fa097; --tile: #eef2ee; --tileline: #cdd6cf;
-  --plate: #fbfbf8; --bowl: #e9dccb; --bowl-in: #cbb69a; --glass: #cfe3ea; --glass-dk: #a9c6d0; --basin: #b9c6cb;
-  --fabric: #e9dfd2; --fabric-2: #6f8f9c; --shade: rgba(0, 0, 0, .08);
-  --bag: #e7a3b4; --bag-in: #f6d9e0; --band: #c46b84; --stitch: #f6d9e0;
-  --card: #c99e6a; --card-dk: #a87d4c; --label: #f4efe6;
-  --app: #f2f4f3; --app-2: #e3e8e6; --fridge-in: #e3eef2; --peg: #d7bf96; --peghole: #8a6f4a;
-  --pan: #3a3f42; --pan-in: #50565a; --bento: #8c2f2f; --bento-in: #f3efe6; --grain: rgba(0, 0, 0, .07);
-  --cup: #3f7cc9; --ghost-inv: 0; --shadow: rgba(20, 30, 25, .18);
+  color-scheme: dark;
+  --bg: #0e1411; --panel: #161f1a; --panel-2: #1c2721; --ink: #e8efe9; --muted: #98aaa0; --line: #263229;
+  --accent: #8fb0ff; --ok: #5cc28a; --warn: #e88b63;
+  --wall: #25302b; --wall-2: #1f2925; --wall-kid: #2b2838; --floor: #3a3128; --wood: #7a583a; --wood-dk: #553c27; --metal: #6c777b; --sky: #2c4552;
+  --counter: #4a4f4c; --cab: #34403b; --cabline: #2a3530; --tile: #2a3430; --tileline: #34403a;
+  --plate: #d9dad4; --bowl: #b8a993; --bowl-in: #8d7c64; --glass: #44606a; --glass-dk: #557580; --basin: #56666c;
+  --fabric: #6d665d; --fabric-2: #3e5660; --shade: rgba(0, 0, 0, .18);
+  --bag: #8f5466; --bag-in: #6b3f4c; --band: #b0607a; --stitch: #d9a3b4;
+  --card: #8a6a45; --card-dk: #6b5034; --label: #cfc6b6;
+  --app: #3a403e; --app-2: #323836; --fridge-in: #2c3a3f; --peg: #6e5d44; --peghole: #3e3427;
+  --pan: #1e2224; --pan-in: #2d3235; --bento: #6e2424; --bento-in: #3a3430; --grain: rgba(0, 0, 0, .18);
+  --cup: #4a72b8; --ghost-inv: 1; --shadow: rgba(0, 0, 0, .45);
   --f-display: 'Bricolage Grotesque', 'Avenir Next', system-ui, sans-serif;
   --f-body: 'Nunito Sans', 'Segoe UI', system-ui, sans-serif;
   --f-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --bg: #121816; --panel: #1b2320; --ink: #e6ede9; --muted: #98a8a0; --line: #2c3833;
-  --accent: #82a0ff; --ok: #5cc28a; --warn: #e88b63;
-  --wall: #25302b; --wall-2: #1f2925; --wall-kid: #2b2838; --floor: #3a3128; --wood: #7a583a; --wood-dk: #553c27; --metal: #6c777b; --sky: #2c4552;
-  --counter: #4a4f4c; --cab: #34403b; --cabline: #2a3530; --tile: #2a3430; --tileline: #34403a;
-  --plate: #d9dad4; --bowl: #b8a993; --bowl-in: #8d7c64; --glass: #44606a; --glass-dk: #557580; --basin: #56666c;
-  --fabric: #6d665d; --fabric-2: #3e5660; --shade: rgba(0, 0, 0, .18);
-  --bag: #8f5466; --bag-in: #6b3f4c; --band: #b0607a; --stitch: #d9a3b4;
-  --card: #8a6a45; --card-dk: #6b5034; --label: #cfc6b6;
-  --app: #3a403e; --app-2: #323836; --fridge-in: #2c3a3f; --peg: #6e5d44; --peghole: #3e3427;
-  --pan: #1e2224; --pan-in: #2d3235; --bento: #6e2424; --bento-in: #3a3430; --grain: rgba(0, 0, 0, .18);
-  --cup: #4a72b8; --ghost-inv: 1; --shadow: rgba(0, 0, 0, .45); color-scheme: dark;
-} }
-:root[data-theme="dark"] {
-  --bg: #121816; --panel: #1b2320; --ink: #e6ede9; --muted: #98a8a0; --line: #2c3833;
-  --accent: #82a0ff; --ok: #5cc28a; --warn: #e88b63;
-  --wall: #25302b; --wall-2: #1f2925; --wall-kid: #2b2838; --floor: #3a3128; --wood: #7a583a; --wood-dk: #553c27; --metal: #6c777b; --sky: #2c4552;
-  --counter: #4a4f4c; --cab: #34403b; --cabline: #2a3530; --tile: #2a3430; --tileline: #34403a;
-  --plate: #d9dad4; --bowl: #b8a993; --bowl-in: #8d7c64; --glass: #44606a; --glass-dk: #557580; --basin: #56666c;
-  --fabric: #6d665d; --fabric-2: #3e5660; --shade: rgba(0, 0, 0, .18);
-  --bag: #8f5466; --bag-in: #6b3f4c; --band: #b0607a; --stitch: #d9a3b4;
-  --card: #8a6a45; --card-dk: #6b5034; --label: #cfc6b6;
-  --app: #3a403e; --app-2: #323836; --fridge-in: #2c3a3f; --peg: #6e5d44; --peghole: #3e3427;
-  --pan: #1e2224; --pan-in: #2d3235; --bento: #6e2424; --bento-in: #3a3430; --grain: rgba(0, 0, 0, .18);
-  --cup: #4a72b8; --ghost-inv: 1; --shadow: rgba(0, 0, 0, .45); color-scheme: dark;
-}
 html, body { background: var(--bg); color: var(--ink); }
-body { font-family: var(--f-body); font-size: 15px; line-height: 1.5;
-  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 20px 32px; }
-.wrap { max-width: 1200px; margin: 0 auto; display: grid; gap: 14px; }
-header { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 8px 24px; }
-h1 { font-family: var(--f-display); font-weight: 800; font-size: clamp(28px, 4vw, 40px); line-height: 1; margin: 0; letter-spacing: -.02em; }
+body { font-family: var(--f-body); font-size: 15px; line-height: 1.5; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0 56px; }
+.wrap { max-width: 1240px; margin: 0 auto; }
+.topbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 24px; padding-block: 22px 18px; border-bottom: 1px solid var(--line); margin-bottom: 22px; }
+h1 { font-family: var(--f-display); font-weight: 800; font-size: clamp(28px, 4vw, 38px); line-height: 1; margin: 0; letter-spacing: -.02em; }
 h1 span { color: var(--accent); }
-.sub { color: var(--muted); margin: 6px 0 0; max-width: 62ch; }
-.tally { font-family: var(--f-mono); font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
-button { font: 600 14px/1 var(--f-body); color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 9px 14px; cursor: pointer; }
+.sub { color: var(--muted); margin: 6px 0 0; font-size: 14px; max-width: 58ch; }
+.me { display: flex; align-items: center; gap: 16px; }
+.tally { font-family: var(--f-mono); font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; text-align: right; }
+button { font: 600 14px/1 var(--f-body); color: var(--ink); background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; cursor: pointer; }
 button:hover { border-color: var(--accent); }
-button[aria-pressed="true"], button[aria-current="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
-button:focus-visible, .item:focus-visible, input:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+button[aria-pressed="true"], button[aria-current="true"] { background: var(--accent); border-color: var(--accent); color: #0e1411; }
+button:focus-visible, .item:focus-visible, input:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 
-.picker { display: grid; gap: 10px; }
-.cats { display: flex; gap: 4px; flex-wrap: wrap; }
-.cats button { font-family: var(--f-display); font-weight: 600; font-size: 16px; border-radius: 10px; padding: 9px 16px; }
-.cats button small { font: 600 11px/1 var(--f-mono); opacity: .75; margin-left: 6px; }
-.chips { display: flex; gap: 6px; flex-wrap: wrap; }
-.chip { display: inline-flex; align-items: center; gap: 7px; padding: 7px 12px 7px 8px; font-size: 13.5px; }
-.chip .n { font: 600 11px/1 var(--f-mono); min-width: 22px; height: 22px; display: inline-grid; place-items: center; border-radius: 999px; background: var(--bg); color: var(--muted); }
-.chip[aria-current="true"] .n { background: var(--panel); color: var(--accent); }
-.chip.done .n { background: var(--ok); color: var(--panel); }
-.chip.done[aria-current="true"] .n { background: var(--panel); color: var(--ok); }
-
-.game { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 16px; align-items: start; }
-@media (max-width: 920px) { .game { grid-template-columns: minmax(0, 1fr); } }
-.stage-col { display: grid; gap: 10px; min-width: 0; }
-.bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; }
-.progress { font-family: var(--f-mono); font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 24px; align-items: start; }
+.stage-col { display: grid; gap: 12px; min-width: 0; }
+.goal { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px 18px; font-size: 15px; color: var(--muted); min-height: 4.6em; }
+.goal b { display: block; font: 800 20px/1.2 var(--f-display); color: var(--ink); margin-bottom: 3px; }
+.bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; }
+.progress { font-family: var(--f-mono); font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
 .progress b { color: var(--ink); }
 .pips { display: inline-flex; gap: 4px; vertical-align: middle; margin-left: 8px; flex-wrap: wrap; }
 .pips i { width: 10px; height: 10px; border-radius: 3px; background: var(--line); transition: background .2s; }
 .pips i.on { background: var(--ok); }
-.tools { display: flex; gap: 6px; flex-wrap: wrap; }
-.tip { margin: 0; font-size: 14px; color: var(--muted); min-height: 1.5em; }
-.tip b { color: var(--ink); font-weight: 700; }
+.pips i.now { background: var(--accent); }
+.tools { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.levels { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: grid; gap: 12px; position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow: auto; }
+.levels h2 { font: 700 11px/1 var(--f-body); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 2px 0 0; }
+.cats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; background: var(--bg); padding: 4px; border-radius: 12px; }
+.cats button { font-family: var(--f-display); font-weight: 600; font-size: 14px; border-radius: 9px; padding: 8px 4px; background: transparent; border-color: transparent; line-height: 1.15; }
+.cats button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #0e1411; }
+.cats button small { display: block; font: 600 10.5px/1 var(--f-mono); opacity: .7; margin-top: 4px; }
+.chips { display: grid; gap: 6px; }
+.chip { display: flex; align-items: center; gap: 10px; padding: 9px 12px 9px 9px; font-size: 14px; text-align: left; border-radius: 12px; width: 100%; }
+.chip .n { font: 600 11px/1 var(--f-mono); min-width: 24px; height: 24px; display: inline-grid; place-items: center; border-radius: 999px; background: var(--bg); color: var(--muted); flex: none; }
+.chip[aria-current="true"] .n { background: #0e1411; color: var(--accent); }
+.chip.done .n { background: var(--ok); color: #0e1411; }
+.chip .st { margin-left: auto; font-size: 11px; color: #e0b43a; letter-spacing: 1px; }
+.chip[aria-current="true"] .st { color: #0e1411; }
+@media (max-width: 560px) { .me { flex-direction: column; align-items: flex-start; gap: 10px; } .tally { text-align: left; } }
+@media (max-width: 980px) { .layout { grid-template-columns: minmax(0, 1fr); } .levels { position: static; max-height: none; } .sub { display: none; } }
 #stage { container-type: inline-size; position: relative; width: 100%; max-width: 100%; aspect-ratio: 1000 / 700; overflow: hidden; border-radius: 14px; background: var(--wall); box-shadow: 0 1px 0 var(--line), 0 10px 30px -18px var(--shadow); touch-action: none; user-select: none; -webkit-user-select: none; }
 #world { position: absolute; left: 0; top: 0; width: 1000px; height: 700px; transform-origin: 0 0; }
 #world > svg.scene, #world > svg.fg, #overlay { position: absolute; inset: 0; width: 1000px; height: 700px; }
@@ -125,8 +106,17 @@ button:focus-visible, .item:focus-visible, input:focus-visible { outline: 3px so
 .card button { justify-self: center; background: var(--accent); color: var(--bg); border-color: var(--accent); }
 .spark { position: absolute; width: 10px; height: 10px; border-radius: 2px; pointer-events: none; z-index: 250; }
 
-aside { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: grid; gap: 14px; min-width: 0; }
-aside h3 { font: 700 11px/1 var(--f-body); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; }
+.under { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; margin-top: 24px; }
+.under summary { cursor: pointer; list-style: none; padding: 14px 18px; font: 700 14px var(--f-body); display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.under summary::-webkit-details-marker { display: none; }
+.under summary::after { content: "Show"; font: 600 12px var(--f-mono); color: var(--muted); }
+.under[open] summary::after { content: "Hide"; }
+.under summary small { font-weight: 400; color: var(--muted); font-size: 13px; margin-left: 10px; }
+.under[open] summary { border-bottom: 1px solid var(--line); }
+.under-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; padding: 18px; }
+@media (max-width: 900px) { .under-grid { grid-template-columns: minmax(0, 1fr); } }
+.under-col { display: grid; gap: 14px; align-content: start; min-width: 0; }
+.under h3 { font: 700 11px/1 var(--f-body); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; }
 .mono { font-family: var(--f-mono); font-size: 12.5px; font-variant-numeric: tabular-nums; }
 .state { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
 .pill { font: 600 11px/1 var(--f-mono); padding: 4px 8px; border-radius: 999px; border: 1px solid var(--line); white-space: nowrap; }
@@ -148,10 +138,9 @@ tr.out td { color: var(--muted); }
 label.tog { display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; }
 .note { font-size: 13px; color: var(--muted); margin: 0; }
 
-.side-head { display: grid; gap: 8px; justify-items: end; }
 .friends { display: flex; gap: 4px; }
-.friend { width: 38px; height: 38px; border-radius: 50%; background: var(--panel); border: 1px solid var(--line); display: grid; place-items: center; overflow: hidden; }
-.friend svg { width: 34px; height: 34px; }
+.friend { width: 40px; height: 40px; border-radius: 50%; background: var(--panel-2); border: 1px solid var(--line); display: grid; place-items: center; overflow: hidden; }
+.friend svg { width: 36px; height: 36px; }
 .friend.locked svg { filter: grayscale(1) brightness(.55); opacity: .35; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 .chip .st { font-size: 11px; color: #d9a31e; letter-spacing: 1px; margin-left: 2px; }
@@ -220,21 +209,18 @@ label.tog { display: flex; align-items: center; gap: 8px; font-size: 14px; curso
 </style>
 
 <div class="wrap">
-  <header>
+  <header class="topbar">
     <div>
       <h1>Tidy <span>Snap</span></h1>
       <p class="sub">Cook real recipes, unbox and build up a room, and sort things by colour, design and size. Finish a level and a new friend comes to say thanks.</p>
     </div>
-    <div class="side-head"><div class="tally" id="tally"></div><div class="friends" id="friends" aria-label="Friends you have met"></div></div>
+    <div class="me"><div class="tally" id="tally"></div><div class="friends" id="friends" aria-label="Friends you have met"></div></div>
   </header>
 
-  <nav class="picker" aria-label="Levels">
-    <div class="cats" id="cats" role="group" aria-label="Level type"></div>
-    <div class="chips" id="chips"></div>
-  </nav>
-
-  <div class="game">
-    <div class="stage-col">
+  <div class="layout">
+    <main class="stage-col">
+      <div class="goal" id="tip" aria-live="polite"></div>
+      <div id="stage"><div id="world"></div></div>
       <div class="bar">
         <div class="progress" id="progress"></div>
         <div class="tools">
@@ -243,27 +229,40 @@ label.tog { display: flex; align-items: center; gap: 8px; font-size: 14px; curso
           <button id="mute" type="button" aria-pressed="false">Sound on</button>
         </div>
       </div>
-      <div id="stage"><div id="world"></div></div>
-      <p class="tip" id="tip"></p>
-    </div>
+    </main>
 
-    <aside aria-label="Snap inspector">
-      <div>
-        <h3>Level state</h3>
-        <div class="state mono"><span id="roomName"></span><span class="pill playing" id="statePill">Playing</span></div>
-      </div>
-      <div>
-        <h3>Snap search · CanSnap</h3>
-        <div id="search" class="search-wrap"></div>
-      </div>
-      <label class="tog"><input type="checkbox" id="radius"> Show snap radius</label>
-      <div>
-        <h3>Events</h3>
-        <ul id="log" class="mono" aria-live="polite"></ul>
-      </div>
-      <p class="note">Rules follow the game's decompiled <span class="mono">MouseInteractNSnap</span>: nearest free point in range wins, distance is measured centre to centre in 2D, and a short cooldown follows every drop. Points that open later use <span class="mono">ChangeCanSnap</span> and <span class="mono">Show</span>.</p>
-    </aside>
+    <nav class="levels" aria-label="Levels">
+      <h2>Levels</h2>
+      <div class="cats" id="cats" role="group" aria-label="Level type"></div>
+      <div class="chips" id="chips"></div>
+    </nav>
   </div>
+
+  <details class="under">
+    <summary><span>Under the hood<small>how the snapping works, live</small></span></summary>
+    <div class="under-grid">
+      <div class="under-col">
+        <div>
+          <h3>Level state</h3>
+          <div class="state mono"><span id="roomName"></span><span class="pill playing" id="statePill">Playing</span></div>
+        </div>
+        <label class="tog"><input type="checkbox" id="radius"> Show snap radius</label>
+        <p class="note">Rules follow the game's decompiled <span class="mono">MouseInteractNSnap</span>: nearest free point in range wins, distance is measured centre to centre in 2D, and a short cooldown follows every drop. Points that open later use <span class="mono">ChangeCanSnap</span> and <span class="mono">Show</span>.</p>
+      </div>
+      <div class="under-col">
+        <div>
+          <h3>Snap search · CanSnap</h3>
+          <div id="search" class="search-wrap"></div>
+        </div>
+      </div>
+      <div class="under-col">
+        <div>
+          <h3>Events</h3>
+          <ul id="log" class="mono" aria-live="polite"></ul>
+        </div>
+      </div>
+    </div>
+  </details>
 </div>
 
 <script src="art.js"></script>

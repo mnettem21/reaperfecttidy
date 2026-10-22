@@ -21,7 +21,7 @@ const jarRow = (x, y, n) => Array.from({ length: n }, (_, i) => `<rect class="s-
 const kitchenDecor = (cy) => (cy < 460 ? '' : windowPane(640, 60, 150, 120) + R(628, 52, 174, 12, 's-wooddk', 4)
   + shelf(60, 330, 170) + jarRow(84, 170, 6)
   + `<circle class="s-wooddk" cx="480" cy="110" r="38"/><circle class="s-wall" cx="480" cy="110" r="32"/><path class="s-cabline" d="M480 110 V88 M480 110 L496 118"/>`
-  + `<path class="s-metal" d="M60 62 H320" stroke-width="5" stroke="currentColor" fill="none"/>` + [90, 150, 210, 270].map((x, i) => `<path class="s-metal" d="M${x} 62 v${22 + (i % 2) * 10}" stroke-width="3"/><ellipse class="s-metal" cx="${x}" cy="${92 + (i % 2) * 12}" rx="${10 + (i % 2) * 4}" ry="12"/>`).join(''));
+  + `<path d="M60 62 H320" style="stroke:var(--metal);fill:none" stroke-width="5" stroke-linecap="round"/>` + [90, 150, 210, 270].map((x, i) => `<path d="M${x} 62 v${22 + (i % 2) * 10}" style="stroke:var(--metal);fill:none" stroke-width="3"/><ellipse class="s-metal" cx="${x}" cy="${92 + (i % 2) * 12}" rx="${10 + (i % 2) * 4}" ry="12"/>`).join(''));
 const kitchen = (cy = 500, x1 = 1000) => wall() + tiles(0, 0, 1000, cy) + kitchenDecor(cy) + counter(cy, 0, x1);
 const binScene = (x, yb, w = 86, h = 116) => `<path class="s-metal" d="M${x - w / 2} ${yb - h + 14} H${x + w / 2} L${x + w / 2 - 8} ${yb} H${x - w / 2 + 8}Z"/><rect class="s-pan" x="${x - w / 2 - 6}" y="${yb - h}" width="${w + 12}" height="16" rx="6"/><path class="s-cabline" d="M${x - 14} ${yb - h + 26} V${yb - 10} M${x} ${yb - h + 26} V${yb - 10} M${x + 14} ${yb - h + 26} V${yb - 10}"/>`;
 const binSlot = (x, yb, o = {}) => S('junk', A.none(100, 130), x, yb - 58, { sink: true, ...o });

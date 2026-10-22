@@ -45,7 +45,7 @@ const SFX = {
   bin: () => { tone(160, .12, 'triangle', .1); tone(120, .16, 'triangle', .08, .08); },
   win: () => [523, 659, 784, 1047].forEach((f, i) => tone(f, .22, 'triangle', .1, i * .11)),
 };
-const haptic = () => { try { navigator.vibrate && navigator.vibrate(12); } catch (_) {} };   // MMVibrationManager.Haptic(4)
+const haptic = () => { try { if (navigator.userActivation && !navigator.userActivation.hasBeenActive) return; navigator.vibrate && navigator.vibrate(12); } catch (_) {} };   // MMVibrationManager.Haptic(4)
 
 /* ---------- tweens (DOTween stand-ins) ---------- */
 const outBack = (t) => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * (t - 1) ** 3 + c1 * (t - 1) ** 2; };   // Ease 27
